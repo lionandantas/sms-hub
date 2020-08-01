@@ -14,9 +14,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import br.com.fidel.smshub.services.SMSSendIntent
 import br.com.fidel.smshub.services.SendTask
 import br.com.fidel.smshub.utils.SettingsManager
+import br.com.fidel.smshub.utils.currentNavigationFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         settingsManager = SettingsManager(this)
+
 
 
         updateTimer()
@@ -85,8 +89,13 @@ class MainActivity : AppCompatActivity() {
             logMain("Mensagem recebida e postada de: " + number + " - text: " + message)
         }
     }
+
     private fun requestSMSReadPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.RECEIVE_SMS
+            )
+        ) {
             // You may display a non-blocking explanation here, read more in the documentation:
             // https://developer.android.com/training/permissions/requesting.html
         }
@@ -100,8 +109,15 @@ class MainActivity : AppCompatActivity() {
 
     fun logMain(message: String, newline: Boolean = true) {
         val mainFragment: FirstFragment
-       try {
-            mainFragment = fragmentManager.findFragmentByTag("MAIN") as FirstFragment
+
+        try {
+            val currentFragment = supportFragmentManager.currentNavigationFragment as FirstFragment
+            //  val navHostFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+            // var teste =  navHostFragment!!.childFragmentManager.fragments[0]
+            if (currentFragment is FirstFragment)
+                mainFragment = currentFragment as FirstFragment
+            else
+                return
         } catch (e: kotlin.TypeCastException) {
             return
         }
