@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">FIDEL SMS HUB</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <integer name="preference_default_interval">1</integer>
+    <bool name="preference_default_send_enabled">false</bool>
+    <string name="preference_default_send_url">http://localhost/send_api.php</string>
+    <string name="preference_default_receive_url">http://localhost/receive_api.php</string>
+    <string name="preference_default_status_url">http://localhost/status_api.php</string>
+    <string name="preference_default_device_id">1</string>
+
+    <string name="preference_file_key">br.com.fidel.smshub.prefs</string>
+    <string name="preference_send_url">br.com.fidel.smshub.prefs.send_url</string>
+    <string name="preference_status_url">br.com.fidel.smshub.prefs.status_url</string>
+    <string name="preference_receive_url">br.com.fidel.smshub.prefs.receive_url</string>
+    <string name="preference_interval">br.com.fidel.smshub.prefs.interval</string>
+    <string name="preference_send_enabled">cbr.com.fidel.smshub.prefs.send_enabled</string>
+    <string name="preference_device_id">br.com.fidel.smshub.prefs.device_id</string>
+</resources>

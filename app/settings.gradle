@@ -1,0 +1,2 @@
+rootProject.name='FIDEL SMS HUB'
+include ':app'
