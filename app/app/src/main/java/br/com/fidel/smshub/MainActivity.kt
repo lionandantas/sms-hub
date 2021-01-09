@@ -8,21 +8,18 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import br.com.fidel.smshub.services.SMSSendIntent
 import br.com.fidel.smshub.services.SendTask
 import br.com.fidel.smshub.utils.SettingsManager
 import br.com.fidel.smshub.utils.currentNavigationFragment
-
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +56,19 @@ class MainActivity : AppCompatActivity() {
             Log.d("-->", "Already subscribed")
         }
     }
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(sendIntent)
+        unregisterReceiver(deliverIntent)
+    }
 
+    override fun onStop() {
+        unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(sendIntent)
+        unregisterReceiver(deliverIntent)
+        super.onStop()
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)

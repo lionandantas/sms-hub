@@ -18,7 +18,7 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
     var mainActivity: MainActivity = _context as MainActivity
 
     override fun run() {
-        lateinit var apiResponse : Response
+        lateinit var apiResponse: Response
         try {
             apiResponse = khttp.post(
                 url = settings.sendURL,
@@ -37,8 +37,15 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
         var sms: SMS? = SMS("", "", "")
         var canSend: Boolean = false
         try {
-            sms = Klaxon().parse<SMS>(apiResponse.text)
-            canSend = true
+            if (apiResponse.statusCode == 400) {
+                mainActivity.runOnUiThread(Runnable {
+                    mainActivity.logMain(apiResponse.text)
+                })
+            } else if (apiResponse.statusCode == 200) {
+                sms = Klaxon().parse<SMS>(apiResponse.text)
+                canSend = true
+            }
+
         } catch (e: com.beust.klaxon.KlaxonException) {
             if (apiResponse.text == "") {
                 mainActivity.runOnUiThread(Runnable {
@@ -63,7 +70,8 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
             sentIn.putExtra("delivered", 0)
 
 
-            val sentPIn = PendingIntent.getBroadcast(mainActivity, mainActivity.nextRequestCode(), sentIn,0)
+            val sentPIn =
+                PendingIntent.getBroadcast(mainActivity, mainActivity.nextRequestCode(), sentIn, 0)
 
             val deliverIn = Intent(mainActivity.DELIVER_SMS_FLAG)
             deliverIn.putExtra("messageId", sms!!.messageId)
@@ -72,7 +80,12 @@ class SendTask constructor(_settings: SettingsManager, _context: Context) : Time
             deliverIn.putExtra("delivered", 1)
 
 
-            val deliverPIn = PendingIntent.getBroadcast(mainActivity, mainActivity.nextRequestCode(), deliverIn, 0)
+            val deliverPIn = PendingIntent.getBroadcast(
+                mainActivity,
+                mainActivity.nextRequestCode(),
+                deliverIn,
+                0
+            )
 
             val smsManager = SmsManager.getDefault() as SmsManager
             smsManager.sendTextMessage(sms!!.number, null, sms!!.message, sentPIn, deliverPIn)
